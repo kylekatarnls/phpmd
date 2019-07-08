@@ -22,7 +22,7 @@ env:
 before_script:
   - composer self-update
   - if [[ $DEPENDENCIES = low ]]; then composer update --prefer-dist --prefer-lowest --prefer-stable; fi
-  - if [[ ! $DEPENDENCIES ]]; then composer install; fi
+  - if [[ ! $DEPENDENCIES ]]; then composer update --prefer-dist --prefer-stable; fi
 
 script:
   - if [[ $WEBSITE  = 'true' ]]; then composer build-website; fi
