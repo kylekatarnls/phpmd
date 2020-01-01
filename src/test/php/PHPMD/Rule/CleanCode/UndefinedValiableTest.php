@@ -87,6 +87,27 @@ class UndefinedVariableTest extends AbstractTest
         $rule->apply($this->getMethod());
     }
 
+    public function testRuleDoesNotApplyToThisInAnonymousClass()
+    {
+        $rule = new UndefinedVariable();
+        $rule->setReport($this->getReportMock(0));
+        $rule->apply($this->getFunction());
+    }
+
+    public function testRuleDoesNotApplyOnParametersInAnonymousClass()
+    {
+        $rule = new UndefinedVariable();
+        $rule->setReport($this->getReportMock(0));
+        $rule->apply($this->getFunction());
+    }
+
+    public function testRuleDoesNotApplyOnDefinedStaticProperties()
+    {
+        $rule = new UndefinedVariable();
+        $rule->setReport($this->getReportMock(0));
+        $rule->apply($this->getMethod());
+    }
+
     /**
      * testRuleDoesNotApplyToUsedProperties
      *

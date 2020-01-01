@@ -22,6 +22,7 @@ use PDepend\Source\AST\State;
 use PHPMD\AbstractNode;
 use PHPMD\Node\AbstractCallableNode;
 use PHPMD\Node\ASTNode;
+use PHPMD\Node\FunctionNode;
 use PHPMD\Node\MethodNode;
 use PHPMD\Rule\AbstractLocalVariable;
 use PHPMD\Rule\FunctionAware;
@@ -61,11 +62,14 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
         $this->collectGlobalStatements($node);
 
         foreach ($node->findChildrenOfType('Variable') as $variable) {
+            $variableImage = $variable->getImage();
+
             if (! $this->isNotSuperGlobal($variable)) {
                 $this->addVariableDefinition($variable);
             }
+
             if (! $this->checkVariableDefined($variable, $node)) {
-                $this->addViolation($variable, array($variable->getImage()));
+                $this->addViolation($variable, array($variableImage));
             }
         }
     }
@@ -246,10 +250,15 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
      */
     private function isNameAllowedInContext(AbstractCallableNode $node, ASTNode $variable)
     {
-        return (
-            $node instanceof MethodNode &&
-            $variable->getImage() === '$this' &&
-            ($node->getModifiers() & State::IS_STATIC) === 0
-        );
+        if ($variable->getImage() !== '$this') {
+            return false;
+        }
+
+        if ($node instanceof MethodNode && ($node->getModifiers() & State::IS_STATIC) === 0) {
+            return true;
+        }
+
+        var_dump($variable->getParent()->getParent());
+        exit;
     }
 }
