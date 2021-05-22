@@ -721,4 +721,14 @@ class UnusedLocalVariableTest extends AbstractTest
         $rule->setReport($this->getReportWithOneViolation());
         $rule->apply($this->getMethod());
     }
+
+    /**
+     * @return void
+     */
+    public function testRuleDoesNotApplyToUsedNamedParameter()
+    {
+        $rule = new UnusedLocalVariable();
+        $rule->setReport($this->getReportWithNoViolation());
+        $rule->apply($this->getMethod());
+    }
 }

@@ -258,6 +258,33 @@ class UnusedFormalParameterTest extends AbstractTest
     }
 
     /**
+     * testRuleDoesNotApplyToParameterUsedAsNamedParameter
+     *
+     * <code>
+     * class Foo
+     * {
+     *     public function bar(string $token, string $method, string $secret, string $iv): string
+     *     {
+     *         return openssl_decrypt(
+     *             data: $token,
+     *             cipher_algo: $method,
+     *             passphrase: $secret,
+     *             iv: $iv,
+     *         ) ?: '';
+     *     }
+     * }
+     * </code>
+     *
+     * @return void
+     */
+    public function testRuleDoesNotApplyToParameterUsedAsNamedParameter()
+    {
+        $rule = new UnusedFormalParameter();
+        $rule->setReport($this->getReportWithNoViolation());
+        $rule->apply($this->getMethod());
+    }
+
+    /**
      * testRuleDoesNotApplyToParameterUsedAsStringIndex
      *
      * <code>
